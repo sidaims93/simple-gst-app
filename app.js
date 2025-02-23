@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -8,14 +10,16 @@ const passportJWT = require('passport-jwt');
 const session = require('express-session');
 
 //Register Routes
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var authRouter = require('./routes/auth');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const authRouter = require('./routes/auth');
 
-var app = express();
+let app = express();
+
+console.log('APP_KEY', process.env.APP_KEY);
 
 app.use(session({
-  secret: 'someverylongstringyoucannotguess',
+  secret: process.env.APP_KEY,
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
@@ -38,20 +42,16 @@ let JwtStrategy = passportJWT.Strategy;
 
 let jwtOptions = {};
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-jwtOptions.secretOrKey = 'someverylongstringyoucannotguess';
+jwtOptions.secretOrKey = process.env.APP_KEY;
 
-var userModel = require(__dirname+'/models/user');
+let db = require('./models');
+let User = db.User;
 
 // lets create our strategy for web token
 let strategy = new JwtStrategy(jwtOptions, async function(jwt_payload, next) {
   console.log('payload received', jwt_payload);
-  let user = await userModel.findOne({ id: jwt_payload.id });
-
-  if (user) {
-    next(null, user);
-  } else {
-    next(null, false);
-  }
+  let user = await User.findOne({ id: jwt_payload.id });
+  next(null, user ? user : false);
 });
 // use the strategy
 passport.use(strategy);

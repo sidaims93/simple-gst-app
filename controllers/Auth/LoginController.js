@@ -54,7 +54,7 @@ module.exports = {
     }
 
     //Now that email and password is correct, return a JSON web token
-    let token = jwt.sign({ id: userRow.id }, 'someverylongstringyoucannotguess');
+    let token = jwt.sign({ id: userRow.id }, process.env.APP_KEY);
     return res.json({ message: 'Logged In!', token: token });
 
   }
