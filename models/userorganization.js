@@ -14,7 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   UserOrganization.init({
-    id: DataTypes.INTEGER,
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
     userId: DataTypes.INTEGER,
     orgId: DataTypes.INTEGER,
     status: DataTypes.TINYINT
