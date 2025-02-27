@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "prepare": "husky"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -27,6 +28,8 @@
   },
   "devDependencies": {
     "dotenv": "^16.4.7",
-    "mysql2": "^3.12.0"
+    "husky": "^9.1.7",
+    "mysql2": "^3.12.0",
+    "prettier": "3.5.2"
   }
 }

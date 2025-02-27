@@ -8,35 +8,39 @@ const saltRounds = 10;
 const sendEmailVerificationEmail = require("../../email/sender.js").default;
 const crypto = require("crypto");
 
-
-function generateHMAC(data, secret){
+function generateHMAC(data, secret) {
   const timestamp = Math.floor(Date.now() / 1000);
   const formatedData = `${data}:${timestamp}`;
-  const hmac = crypto.createHmac("sha256", secret).update(formatedData).digest("hex");
-  return {hmac, timestamp};
+  const hmac = crypto
+    .createHmac("sha256", secret)
+    .update(formatedData)
+    .digest("hex");
+  return { hmac, timestamp };
 }
 
-function verifyHMAC(data, givenHmac, givenTimestamp, secret, timeWindow = 600){
-
-    const formatedData = `${data}:${givenTimestamp}`;
-    const currentTimestamp = Math.floor(Date.now() / 1000);
+function verifyHMAC(data, givenHmac, givenTimestamp, secret, timeWindow = 600) {
+  const formatedData = `${data}:${givenTimestamp}`;
+  const currentTimestamp = Math.floor(Date.now() / 1000);
 
   if (Math.abs(currentTimestamp - givenTimestamp) > timeWindow) {
     return false; // link expired
   }
 
-  const expectedHmac = crypto.createHmac("sha256", secret)
+  const expectedHmac = crypto
+    .createHmac("sha256", secret)
     .update(formatedData)
     .digest("hex");
 
-  return crypto.timingSafeEqual(Buffer.from(expectedHmac, 'hex'), Buffer.from(givenHmac, 'hex'));
+  return crypto.timingSafeEqual(
+    Buffer.from(expectedHmac, "hex"),
+    Buffer.from(givenHmac, "hex"),
+  );
 }
-
 
 module.exports = {
   async signup(req, res) {
     const { firstName, lastName, email, password } = req.body;
-    if (!firstName){
+    if (!firstName) {
       return res
         .json({
           error: "Invalid or empty first name!",
@@ -44,7 +48,7 @@ module.exports = {
         .status(400);
     }
 
-    if (!lastName){
+    if (!lastName) {
       return res
         .json({
           error: "Invalid or empty last name!",
@@ -108,10 +112,8 @@ module.exports = {
       active: false, //active false because this account is not verified yet (Email/OTP auth)
     };
 
-
-    const {hmac , timestamp } = generateHMAC(email, process.env.APP_SECRET);
+    const { hmac, timestamp } = generateHMAC(email, process.env.APP_SECRET);
     sendEmailVerificationEmail(firstName, hmac, email, timestamp);
-
 
     const userRow = await User.create(dbPayload);
     //Create an organization and add the mapping
@@ -131,38 +133,37 @@ module.exports = {
   },
 
   async verifyEmail(req, res) {
-    const success_template_file = fs.readFileSync("./email/templates/success.ejs", "utf8");
-    const fail_template_file = fs.readFileSync("./email/templates/fail.ejs", "utf8");
+    const success_template_file = fs.readFileSync(
+      "./email/templates/success.ejs",
+      "utf8",
+    );
+    const fail_template_file = fs.readFileSync(
+      "./email/templates/fail.ejs",
+      "utf8",
+    );
     const success_template = ejs.render(success_template_file, {});
     const fail_template = ejs.render(fail_template_file, {});
-    
+
     const { hmac, time, email } = req.query;
-    if(!hmac || !time || !email){
-      return res
-        .status(400).send(fail_template);
+    if (!hmac || !time || !email) {
+      return res.status(400).send(fail_template);
     }
 
     const isValid = verifyHMAC(email, hmac, time, process.env.APP_SECRET);
 
-    if(!isValid){
-
-      return res
-        .status(400).send(fail_template);
-
+    if (!isValid) {
+      return res.status(400).send(fail_template);
     }
 
     let user = await User.findOne({
       where: { email: email },
     });
 
-    if(!user){
-      return res
-        .status(400).send(fail_template);
+    if (!user) {
+      return res.status(400).send(fail_template);
     }
-    await user.update({active: true});
+    await user.update({ active: true });
 
-    return res
-      .status(400).send(success_template);
-
+    return res.status(400).send(success_template);
   },
 };

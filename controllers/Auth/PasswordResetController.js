@@ -1,13 +1,11 @@
 module.exports = {
-
-  passwordReset (req, res) {
-    console.log('=======req.body=======');
+  passwordReset(req, res) {
+    console.log("=======req.body=======");
     console.log(req.body);
 
     return res.json({
       status: true,
-      message: 'In passwordReset controller function '
+      message: "In passwordReset controller function ",
     });
-  }
-
-}
+  },
+};
