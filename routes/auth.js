@@ -1,12 +1,13 @@
-let express = require("express");
-let router = express.Router();
-const RegisterController = require("../controllers/Auth/RegisterController");
-const LoginController = require("../controllers/Auth/LoginController");
-const PasswordResetController = require("../controllers/Auth/PasswordResetController");
-/* GET users listing. */
-router.post("/register", RegisterController.signup);
-router.post("/login", LoginController.login);
-router.get("/verify/email", RegisterController.verifyEmail);
-router.post("/password/reset", PasswordResetController.passwordReset);
+import express from "express";
+const router = express.Router();
+export default router;
 
-module.exports = router;
+import { signup, verifyEmail } from "../controllers/Auth/RegisterController.js";
+import login from "../controllers/Auth/LoginController.js";
+import passwordReset from "../controllers/Auth/PasswordResetController.js";
+
+/* GET users listing. */
+router.post("/register", signup);
+router.post("/login", login);
+router.get("/verify/email", verifyEmail);
+router.post("/password/reset", passwordReset);

@@ -1,20 +1,21 @@
-require("dotenv").config();
+import "dotenv/config";
 
-const createError = require("http-errors");
-const express = require("express");
-const path = require("path");
-const cookieParser = require("cookie-parser");
-const logger = require("morgan");
-const passport = require("passport");
-const passportJWT = require("passport-jwt");
-const session = require("express-session");
+import createError from "http-errors";
+import express from "express";
+import path from "path";
+import cookieParser from "cookie-parser";
+import logger from "morgan";
+import passport from "passport";
+import passportJWT from "passport-jwt";
+import session from "express-session";
 
 //Register Routes
-const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
-const authRouter = require("./routes/auth");
+import indexRouter from "./routes/index.js";
+import usersRouter from "./routes/users.js";
+import authRouter from "./routes/auth.js";
 
-let app = express();
+const app = express();
+export default app;
 
 console.log("APP_KEY", process.env.APP_KEY);
 
@@ -27,14 +28,14 @@ app.use(
   }),
 );
 // view engine setup
-app.set("views", path.join(__dirname, "views"));
+app.set("views", "./views");
 app.set("view engine", "ejs");
 
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static("./public"));
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -46,8 +47,7 @@ let jwtOptions = {};
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 jwtOptions.secretOrKey = process.env.APP_KEY;
 
-let db = require("./models");
-let User = db.User;
+import User from "./models/user.js";
 
 // lets create our strategy for web token
 let strategy = new JwtStrategy(jwtOptions, async function (jwt_payload, next) {
@@ -76,5 +76,3 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
-
-module.exports = app;

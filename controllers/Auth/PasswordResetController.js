@@ -1,11 +1,9 @@
-module.exports = {
-  passwordReset(req, res) {
-    console.log("=======req.body=======");
-    console.log(req.body);
+export default function passwordReset(req, res) {
+  console.log("=======req.body=======");
+  console.log(req.body);
 
-    return res.json({
-      status: true,
-      message: "In passwordReset controller function ",
-    });
-  },
-};
+  return res.json({
+    status: true,
+    message: "In passwordReset controller function ",
+  });
+}
