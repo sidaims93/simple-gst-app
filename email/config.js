@@ -1,11 +1,16 @@
 import nodemailer from "nodemailer";
+import configData from "../config/email.json" with { type: "json" };
 
-export const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
-  secure: process.env.EMAIL_SECURE,
-  auth: {
-    user: process.env.EMAIL_ADDR,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+const env = process.env.NODE_ENV || "development";
+const config = configData[env];
+
+let config_obj = { ...config };
+
+if (env === "production" && config.auth) {
+  config_obj.auth = {
+    user: config.auth.user,
+    pass: process.env.EMAIL_PASS || "",
+  };
+}
+const transporter = nodemailer.createTransport(config_obj);
+export default transporter;

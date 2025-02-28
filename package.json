@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "NODE_ENV='test' vitest"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -31,6 +32,8 @@
     "dotenv": "^16.4.7",
     "husky": "^9.1.7",
     "mysql2": "^3.12.0",
-    "prettier": "3.5.2"
+    "prettier": "3.5.2",
+    "supertest": "^7.0.0",
+    "vitest": "^3.0.7"
   }
 }

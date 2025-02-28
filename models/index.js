@@ -6,7 +6,7 @@ import { fileURLToPath } from "url";
 import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
-const configData = require("./../config/config.json");
+import configData from "../config/db.json" with { type: "json" };
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

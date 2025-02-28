@@ -1,4 +1,4 @@
-import { transporter } from "./config.js";
+import transporter from "./config.js";
 import fs from "fs";
 import ejs from "ejs";
 

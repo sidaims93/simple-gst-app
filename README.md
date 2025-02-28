@@ -15,3 +15,11 @@ Models:
 1. User model (id, email, password, status, active, customer_id)
 2. Organizations model (Id, name, API Key)
 3. User-Organization model (Id, User ID, Org ID, status)
+
+# Running vitest
+
+steps:
+
+1. make sure there is a database named `test-simple-gst-app` inside the mysql sever.
+2. start the mailpit contaner using compose file located at compose/mailpit/docker-compose.yml
+3. run `npm test`

@@ -77,12 +77,11 @@ export async function signup(req, res) {
     where: { email: email },
     raw: true,
   });
+
   if (checkDuplicateEmail) {
-    return res
-      .json({
-        error: "Duplicate email detected!",
-      })
-      .status(422);
+    return res.status(422).json({
+      error: "Duplicate email detected!",
+    });
   }
 
   if (password.length < 4 && password.length > 50) {
@@ -125,11 +124,9 @@ export async function signup(req, res) {
     orgId: organization.id,
   });
 
-  return res
-    .json({
-      message: "Registration successful!",
-    })
-    .status(200);
+  return res.status(201).json({
+    message: "Registration successful!",
+  });
 }
 
 export async function verifyEmail(req, res) {
