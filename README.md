@@ -1,5 +1,7 @@
 # simple-gst-app
 
+Please use CommonJS (CJS) style Javascript when you want to modify something.
+
 This is a GST app which I will build live on YouTube.
 
 Some info (might be re-factored later lol)

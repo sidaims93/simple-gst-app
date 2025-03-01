@@ -6,7 +6,7 @@ const PasswordResetController = require("../controllers/Auth/PasswordResetContro
 /* GET users listing. */
 router.post("/register", RegisterController.signup);
 router.post("/login", LoginController.login);
-router.get("/verify/email", RegisterController.verifyEmail);
+router.post("/verify/email", RegisterController.verifyOTP);
 router.post("/password/reset", PasswordResetController.passwordReset);
 
 module.exports = router;
