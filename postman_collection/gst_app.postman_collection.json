@@ -1,39 +1,35 @@
 {
-	"info": {
-		"_postman_id": "db750b8f-c774-41d3-877e-5491629a8960",
-		"name": "GST App",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6255553"
-	},
-	"item": [
-		{
-			"name": "Register API",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"sid.sjv@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{BASE_URL}}auth/register",
-					"host": [
-						"{{BASE_URL}}auth"
-					],
-					"path": [
-						"register"
-					]
-				}
-			},
-			"response": []
-		}
-	]
+  "info": {
+    "_postman_id": "db750b8f-c774-41d3-877e-5491629a8960",
+    "name": "GST App",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "6255553"
+  },
+  "item": [
+    {
+      "name": "Register API",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"sid.sjv@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{BASE_URL}}auth/register",
+          "host": ["{{BASE_URL}}auth"],
+          "path": ["register"]
+        }
+      },
+      "response": []
+    }
+  ]
 }

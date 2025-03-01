@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -13,24 +11,27 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  User.init({
-    id: {
-      type: DataTypes.INTEGER, 
-      autoIncrement: true, 
-      primaryKey: true
+  User.init(
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      firstName: DataTypes.STRING,
+      lastName: DataTypes.STRING,
+      email: {
+        type: DataTypes.STRING,
+        unique: true,
+      },
+      password: DataTypes.STRING,
+      status: DataTypes.TINYINT,
+      active: DataTypes.TINYINT,
     },
-    firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING,
-    email: {
-      type: DataTypes.STRING, 
-      unique: true
+    {
+      sequelize,
+      modelName: "User",
     },
-    password: DataTypes.STRING,
-    status: DataTypes.TINYINT,
-    active: DataTypes.TINYINT
-  }, {
-    sequelize,
-    modelName: 'User',
-  });
+  );
   return User;
 };
