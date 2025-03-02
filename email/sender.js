@@ -3,9 +3,21 @@ const ejs = require("ejs");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const email_verify_template = fs.readFileSync(
-  "./email/templates/verify_email.ejs",
+  "./email/templates/send_otp.ejs",
   "utf8",
 );
+const env = process.env.NODE_ENV || "development";
+const config = require("./../config/email.json")[env];
+
+let config_obj = { ...config };
+
+if (env === "production" && config.auth) {
+  config_obj.auth = {
+    user: config.auth.user,
+    pass: process.env.EMAIL_PASS || "",
+  };
+}
+
 module.exports = {
   verifyHMAC(data, givenHmac, givenTimestamp, secret, timeWindow = 600) {
     const formatedData = `${data}:${givenTimestamp}`;
@@ -50,13 +62,14 @@ module.exports = {
     return result;
   },
 
-  async sendEmailVerificationEmail(name, hmac, to, timeStamp) {
+  async sendEmailVerificationEmail(name, hmac, to, timeStamp, otp) {
     // hmac will be verifyied at the verification end.
     const htmlContent = ejs.render(email_verify_template, {
       name,
       hmac,
       to,
       timeStamp,
+      otp,
     });
 
     const mailOptions = {
@@ -66,15 +79,7 @@ module.exports = {
       html: htmlContent,
     };
 
-    const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
-      secure: process.env.EMAIL_SECURE,
-      auth: {
-        user: process.env.EMAIL_ADDR,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+    const transporter = nodemailer.createTransport(config_obj);
     await transporter.sendMail(mailOptions);
     return true;
   },
