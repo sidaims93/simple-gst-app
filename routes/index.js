@@ -1,12 +1,8 @@
 var express = require("express");
 var router = express.Router();
-
+var mw = require("../middleware/auth.js");
+var DashboardController = require("../controllers/DashboardController");
 /* GET home page. */
-router.get("/", function (req, res, next) {
-  return res.json({
-    status: true,
-    message: "Welcome to GST App",
-  });
-});
+router.get("/", mw.RequireAuth, DashboardController.index);
 
 module.exports = router;

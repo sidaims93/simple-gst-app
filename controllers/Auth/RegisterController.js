@@ -138,6 +138,7 @@ module.exports = {
 
   async verifyOTP(req, res) {
     const { email, otp } = req.body;
+
     if (!email) {
       return res.status(400).json({ error: "Invalid email" });
     }
@@ -149,6 +150,7 @@ module.exports = {
     const existingRecord = await EmailOTP.findOne({
       where: { email: email, otp: otp, status: false },
     }); //Should be an un-used OTP
+
     if (!existingRecord) {
       return res.status(400).json({ error: "Invalid Email or OTP" });
     }
@@ -160,40 +162,5 @@ module.exports = {
     //TODO: Create a Bearer token and pass it to response, so the user can be taken to their dashboard instantaneously
 
     return res.status(200).json({ message: "Account Verified!" });
-  },
-
-  async verifyEmail(req, res) {
-    const success_template_file = fs.readFileSync(
-      "./email/templates/success.ejs",
-      "utf8",
-    );
-    const fail_template_file = fs.readFileSync(
-      "./email/templates/fail.ejs",
-      "utf8",
-    );
-    const success_template = ejs.render(success_template_file, {});
-    const fail_template = ejs.render(fail_template_file, {});
-
-    const { hmac, time, email } = req.query;
-    if (!hmac || !time || !email) {
-      return res.status(400).send(fail_template);
-    }
-
-    const isValid = verifyHMAC(email, hmac, time, process.env.APP_SECRET);
-
-    if (!isValid) {
-      return res.status(400).send(fail_template);
-    }
-
-    let user = await User.findOne({
-      where: { email: email },
-    });
-
-    if (!user) {
-      return res.status(400).send(fail_template);
-    }
-    await user.update({ active: true });
-
-    return res.status(400).send(success_template);
   },
 };
